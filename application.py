@@ -1,22 +1,12 @@
-# -*- coding: utf-8 -*-
 from selenium import webdriver
-import unittest
-from group import Group
 
-class UntitledTestCase(unittest.TestCase):
-    def setUp(self):
+
+
+class Application:
+
+    def __init__(self):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
-    
-    def test_add_group(self):
-        self.login(username="admin", password="secret")
-        self.create_group(Group(name="1234", header="1234", footer="1234"))
-        self.logout()
-
-    def test_add_empty_group(self):
-        self.login(username="admin", password="secret")
-        self.create_group(Group(name="", header="", footer=""))
-        self.logout()
 
     def logout(self):
         wd = self.wd
@@ -65,8 +55,5 @@ class UntitledTestCase(unittest.TestCase):
         wd = self.wd
         wd.get("https://localhost/addressbook/")
 
-    def tearDown(self):
+    def destroy(self):
         self.wd.quit()
-
-if __name__ == "__main__":
-    unittest.main()
