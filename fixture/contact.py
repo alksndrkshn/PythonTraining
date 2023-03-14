@@ -20,6 +20,7 @@ class ContactHelper:
         wd.find_element_by_name("nickname").click()
         wd.find_element_by_name("nickname").clear()
         wd.find_element_by_name("nickname").send_keys(contact.nickname)
+        wd.find_element_by_name("update").click()
 
     def submit_create_new_contact(self):
         wd = self.app.wd
