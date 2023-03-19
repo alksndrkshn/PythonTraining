@@ -1,9 +1,9 @@
 
-
 class ContactHelper:
 
     def __init__(self, app):
         self.app = app
+
 
     def init_create_new_contact(self):
         wd = self.app.wd
@@ -41,3 +41,16 @@ class ContactHelper:
     def submit_edit_contact(self):
         wd = self.app.wd
         wd.find_element_by_name("update").click()
+
+
+    def create_new(self, contact):
+        wd = self.app.wd
+        self.init_create_new_contact()
+        self.fill_form(contact)
+        self.submit_create_new_contact()
+        wd.find_element_by_link_text("home").click()
+
+    def is_list_empty(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home").click()
+        return len(wd.find_elements_by_name("selected[]"))
