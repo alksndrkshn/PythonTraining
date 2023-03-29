@@ -26,18 +26,30 @@ class ContactHelper:
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
 
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
-        # select first contact
-        wd.find_element_by_name("selected[]").click()
-        # submit deletion
+        wd.find_elements_by_name("selected[]")[index].click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to.alert.accept()
         self.contact_cache = None
 
-    def edit_first_contact(self, contact):
+    def edit_first_contact(self):
+        self.edit_contact_by_index(0)
+
+    def edit_contact_by_index(self, index, new_contact):
         wd = self.app.wd
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
-        self.fill_form(contact)
+        self.open_contact_list()
+        wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
+        self.fill_form(new_contact)
+        wd.find_element_by_name("update").click()
+        self.contact_cache = None
+
+
+    def select_contact_by_index(self, index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
 
     def submit_edit_contact(self):
         wd = self.app.wd
