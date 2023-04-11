@@ -4,7 +4,6 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
-
     def init_create_new_contact(self):
         wd = self.app.wd
         wd.find_element_by_link_text("add new").click()
@@ -23,10 +22,14 @@ class ContactHelper:
 
     def submit_create_new_contact(self):
         wd = self.app.wd
-        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        wd.find_element_by_xpath("//input[@name='submit']").click()
+        self.contact_cache = None
+
+
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
+
 
     def delete_contact_by_index(self, index):
         wd = self.app.wd
@@ -38,13 +41,16 @@ class ContactHelper:
     def edit_first_contact(self):
         self.edit_contact_by_index(0)
 
-    def edit_contact_by_index(self, index, new_contact):
+
+
+    def edit_contact_by_index(self, index, contact):
         wd = self.app.wd
         self.open_contact_list()
         wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
-        self.fill_form(new_contact)
+        self.fill_form(contact)
         wd.find_element_by_name("update").click()
         self.contact_cache = None
+
 
 
     def select_contact_by_index(self, index):
@@ -61,17 +67,21 @@ class ContactHelper:
         if not (wd.current_url.endswith("/addressbook") and len(wd.find_elements_by_name("add")) > 0):
             wd.find_element_by_link_text("home").click()
 
+
     def create_new(self, contact):
         wd = self.app.wd
         self.init_create_new_contact()
         self.fill_form(contact)
         self.submit_create_new_contact()
         wd.find_element_by_link_text("home").click()
+        self.contact_cache = None
+
 
     def is_list_empty(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home").click()
         return len(wd.find_elements_by_name("selected[]"))
+        self.contact_cache = None
 
     def get_contact_list(self):
         if self.contact_cache is None:
@@ -85,7 +95,6 @@ class ContactHelper:
                 self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id))
         return list(self.contact_cache)
 
-    contact_cache = None
 
     def count(self):
         wd = self.app.wd

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
 from model.contact import Contact
-
-
 def test_create_contact(app):
         old_contacts = app.contact.get_contact_list()
         contact = Contact(firstname="name_test", middlename="middle_test", lastname="last_test", nickname="nick_test")
