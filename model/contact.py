@@ -1,12 +1,16 @@
 from sys import maxsize
 class Contact:
 
-    def __init__(self, firstname=None, middlename=None, nickname=None, id=None, lastname=None):
+    def __init__(self, firstname=None, middlename=None, nickname=None, id=None, lastname=None, homephone=None, mobilephone=None, workphone=None, secondaryphone=None):
         self.firstname = firstname
         self.middlename = middlename
         self.nickname = nickname
         self.id = id
         self.lastname = lastname
+        self.homephone = homephone
+        self.mobilephone = mobilephone
+        self.workphone = workphone
+        self.secondaryphone = secondaryphone
 
     def __repr__(self):
         return "%s:%s:%s" % (self.id, self.firstname,  self.lastname)

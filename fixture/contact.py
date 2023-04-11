@@ -1,4 +1,6 @@
 from model.contact import Contact
+
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -25,11 +27,8 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@name='submit']").click()
         self.contact_cache = None
 
-
-
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
-
 
     def delete_contact_by_index(self, index):
         wd = self.app.wd
@@ -41,8 +40,6 @@ class ContactHelper:
     def edit_first_contact(self):
         self.edit_contact_by_index(0)
 
-
-
     def edit_contact_by_index(self, index, contact):
         wd = self.app.wd
         self.open_contact_list()
@@ -50,8 +47,6 @@ class ContactHelper:
         self.fill_form(contact)
         wd.find_element_by_name("update").click()
         self.contact_cache = None
-
-
 
     def select_contact_by_index(self, index):
         wd = self.app.wd
@@ -67,7 +62,6 @@ class ContactHelper:
         if not (wd.current_url.endswith("/addressbook") and len(wd.find_elements_by_name("add")) > 0):
             wd.find_element_by_link_text("home").click()
 
-
     def create_new(self, contact):
         wd = self.app.wd
         self.init_create_new_contact()
@@ -75,7 +69,6 @@ class ContactHelper:
         self.submit_create_new_contact()
         wd.find_element_by_link_text("home").click()
         self.contact_cache = None
-
 
     def is_list_empty(self):
         wd = self.app.wd
@@ -89,12 +82,17 @@ class ContactHelper:
             self.open_contact_list()
             self.contact_cache = []
             for element in wd.find_elements_by_css_selector("[name=entry]"):
+                cells = element.find_elements_by_tag_name("td")
                 lastname = element.find_element_by_xpath("./td[2]").text
                 firstname = element.find_element_by_xpath("./td[3]").text
-                id = element.find_element_by_name("selected[]").get_attribute("id")
-                self.contact_cache.append(Contact(lastname=lastname, firstname=firstname, id=id))
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                all_phones = cells[5].text.splitlines()
+                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id,
+                                                  homephone=all_phones[0],
+                                                  mobilephone=all_phones[1],
+                                                  workphone=all_phones[2],
+                                                  secondaryphone=all_phones[3]))
         return list(self.contact_cache)
-
 
     def count(self):
         wd = self.app.wd
@@ -102,3 +100,27 @@ class ContactHelper:
         return len(wd.find_elements_by_name("selected[]"))
 
     contact_cache = None
+
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.open_contact_list()
+        wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
+
+    def open_contact_view_index(self, index):
+        wd = self.app.wd
+        self.open_contact_list()
+        wd.find_elements_by_xpath("//img[@alt='Details']")[index].click()
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value")
+        workphone = wd.find_element_by_name("work").get_attribute("value")
+        mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
+        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        return Contact(firstname=firstname, lastname=lastname, id=id,
+                       homephone=homephone, mobilephone=mobilephone,
+                       workphone=workphone, secondaryphone=secondaryphone)
