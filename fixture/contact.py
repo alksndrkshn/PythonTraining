@@ -1,4 +1,6 @@
 from model.contact import Contact
+from selenium.webdriver.support.ui import Select
+
 import re
 
 class ContactHelper:
@@ -12,15 +14,37 @@ class ContactHelper:
 
     def fill_form(self, contact):
         wd = self.app.wd
-        wd.find_element_by_name("firstname").click()
-        wd.find_element_by_name("firstname").clear()
-        wd.find_element_by_name("firstname").send_keys(contact.firstname)
-        wd.find_element_by_name("middlename").click()
-        wd.find_element_by_name("middlename").clear()
-        wd.find_element_by_name("middlename").send_keys(contact.middlename)
-        wd.find_element_by_name("nickname").click()
-        wd.find_element_by_name("nickname").clear()
-        wd.find_element_by_name("nickname").send_keys(contact.nickname)
+        self.change_contact_field("firstname", contact.firstname)
+        self.change_contact_field("middlename", contact.middlename)
+        self.change_contact_field("lastname", contact.lastname)
+        self.change_contact_field("nickname", contact.nickname)
+        self.change_contact_field("title", contact.title)
+        self.change_contact_field("company", contact.company)
+        self.change_contact_field("address", contact.address)
+        self.change_contact_field("home", contact.homephone)
+        self.change_contact_field("mobile", contact.mobilephone)
+        self.change_contact_field("work", contact.workphone)
+        self.change_contact_field("email", contact.email1)
+        self.change_contact_field("email2", contact.email2)
+        self.change_contact_field("email3", contact.email3)
+        self.change_contact_field("homepage", contact.site)
+        self.change_contact_field("address2", contact.address2)
+        self.change_contact_field("phone2", contact.secondaryphone)
+        self.change_contact_field("notes", contact.notes)
+
+    def change_contact_field(self, field_name, text):
+        wd = self.app.wd
+        if text is not None:
+            wd.find_element_by_name(field_name).click()
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(text)
+
+    def change_contact_date(self, field_name, text):
+        wd = self.app.wd
+        if text is not None:
+            wd.find_element_by_name(field_name).click()
+            wd.find_element_by_name(field_name).clear()
+            wd.find_element_by_name(field_name).send_keys(text)
 
     def submit_create_new_contact(self):
         wd = self.app.wd

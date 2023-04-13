@@ -10,15 +10,15 @@ class Contact:
                  ):
         self.firstname = firstname
         self.middlename = middlename
+        self.lastname = lastname
         self.nickname = nickname
         self.id = id
-        self.lastname = lastname
+        self.title = title
         self.homephone = homephone
         self.mobilephone = mobilephone
         self.workphone = workphone
         self.secondaryphone = secondaryphone
         self.all_phones_from_home_page = all_phones_from_home_page
-        self.title = title
         self.company = company
         self.address = address
         self.email1 = email1
