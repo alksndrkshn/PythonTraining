@@ -98,7 +98,6 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_element_by_link_text("home").click()
         return len(wd.find_elements_by_name("selected[]"))
-        self.contact_cache = None
 
     def get_contact_list(self):
         if self.contact_cache is None:
