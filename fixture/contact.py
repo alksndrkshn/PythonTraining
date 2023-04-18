@@ -94,7 +94,7 @@ class ContactHelper:
         wd.find_element_by_link_text("home").click()
         self.contact_cache = None
 
-    def is_list_empty(self):
+    def get_count(self):
         wd = self.app.wd
         wd.find_element_by_link_text("home").click()
         return len(wd.find_elements_by_name("selected[]"))
@@ -165,3 +165,28 @@ class ContactHelper:
                        mobilephone=mobilephone,
                        workphone=workphone,
                        secondaryphone=secondaryphone)
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_elements_by_css_selector("input[value='%s']" % id).click()
+
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.open_contact_list()
+        wd.find_element_by_id(id).click()
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to.alert.accept()
+        self.contact_cache = None
+
+    def open_contact_to_edit_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        wd.find_elements_by_css_selector('a[href="edit.php?id=%s"]' % id).click()
+
+    def edit_contact_by_id(self, id, new_contact_data):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_id(id)
+        self.fill_form(new_contact_data)
+        wd.find_element_by_name("update").click()
+        self.app.open_home_page()
+        self.contact_cache = None
