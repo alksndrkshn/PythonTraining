@@ -22,7 +22,7 @@ for o, a in opts:
         f = a
 
 def random_string(maxlen):
-    symbols = string.ascii_letters + string.digits + " " * 10 # + string.punctuation
+    symbols = string.ascii_letters + string.digits
     return ''.join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 

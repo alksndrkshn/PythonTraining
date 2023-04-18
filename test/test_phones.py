@@ -1,5 +1,7 @@
 import re
 from random import randrange
+from model.contact import Contact
+
 #def test_phones_on_home_page(app):
 #    contact_from_home_page = app.contact.get_contact_list()[0]
 #    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
@@ -22,8 +24,25 @@ def test_contact_info_on_home_page(app):
     assert contact_from_home_page.lastname == contact_from_edit_page.lastname
     assert contact_from_home_page.firstname == contact_from_edit_page.firstname
     assert contact_from_home_page.address == contact_from_edit_page.address
-    assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
-    assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
+    assert contact_from_home_page.all_emails_from_home_page == app.contact.merge_emails_like_on_home_page(contact_from_edit_page)
+    assert contact_from_home_page.all_phones_from_home_page == app.contact.merge_phones_like_on_home_page(contact_from_edit_page)
+
+def test_contacts_info_on_homepage_and_db(app, db):
+    if app.contact.get_count() == 0:
+        app.contact.create_new(Contact(firstname="test_contact", lastname="test_contact", homephone="12345",
+                                       email1="test_contact@test.com", address="test_address"))
+    contacts_from_homepage = sorted(app.contact.get_contact_list(), key=Contact.id_or_max)
+    contacts_from_db = sorted(db.get_contact_list(), key=Contact.id_or_max)
+    for i in range(len(contacts_from_homepage)):
+        hp_contact = contacts_from_homepage[i]
+        db_contact = contacts_from_db[i]
+        assert hp_contact.firstname == db_contact.firstname
+        assert hp_contact.lastname == db_contact.lastname
+        assert hp_contact.address == db_contact.address
+        assert hp_contact.all_phones_from_home_page == merge_phones_like_on_home_page(db_contact)
+        assert hp_contact.all_emails_from_home_page == merge_emails_like_on_home_page(db_contact)
+    print("Successfully verified %s Homepage contacts and Database contacts" % str(len(contacts_from_homepage)))
+
 def clear(s):
     return re.sub("[() -]", "", s)
 
