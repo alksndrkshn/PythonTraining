@@ -190,3 +190,19 @@ class ContactHelper:
         wd.find_element_by_name("update").click()
         self.app.open_home_page()
         self.contact_cache = None
+
+    def add_contact_to_group(self, contact, group):
+        wd = self.app.wd
+        self.open_contact_list()
+        self.select_contact_by_id(contact.id)
+        wd.find_element_by_name("to_group").find_elements_by_css_selector("option[value='%s']" % group.id).click()
+        wd.find_element_by_name("add").click()
+        self.open_contact_list()
+
+    def delete_contact_from_group(self, contact, group):
+        wd = self.app.wd
+        self.open_contact_list()
+        wd.find_element_by_name("group").find_elements_by_css_selector("option[value='%s']" % group.id).click()
+        self.select_contact_by_id(contact.id)
+        wd.find_element_by_name("remove").click()
+        self.open_contact_list()
