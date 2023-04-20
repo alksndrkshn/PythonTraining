@@ -168,7 +168,7 @@ class ContactHelper:
 
     def select_contact_by_id(self, id):
         wd = self.app.wd
-        wd.find_elements_by_css_selector("input[value='%s']" % id).click()
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
 
     def delete_contact_by_id(self, id):
         wd = self.app.wd
@@ -181,7 +181,7 @@ class ContactHelper:
     def open_contact_to_edit_by_id(self, id):
         wd = self.app.wd
         self.app.open_home_page()
-        wd.find_elements_by_css_selector('a[href="edit.php?id=%s"]' % id).click()
+        wd.find_element_by_css_selector('a[href="edit.php?id=%s"]' % id).click()
 
     def edit_contact_by_id(self, id, new_contact_data):
         wd = self.app.wd
@@ -195,14 +195,14 @@ class ContactHelper:
         wd = self.app.wd
         self.open_contact_list()
         self.select_contact_by_id(contact.id)
-        wd.find_element_by_name("to_group").find_elements_by_css_selector("option[value='%s']" % group.id).click()
+        wd.find_element_by_name("to_group").find_element_by_css_selector("option[value='%s']" % group.id).click()
         wd.find_element_by_name("add").click()
         self.open_contact_list()
 
     def delete_contact_from_group(self, contact, group):
         wd = self.app.wd
         self.open_contact_list()
-        wd.find_element_by_name("group").find_elements_by_css_selector("option[value='%s']" % group.id).click()
+        wd.find_element_by_name("group").find_element_by_css_selector("option[value='%s']" % group.id).click()
         self.select_contact_by_id(contact.id)
         wd.find_element_by_name("remove").click()
         self.open_contact_list()
